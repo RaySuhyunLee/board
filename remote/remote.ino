@@ -1,4 +1,5 @@
 #include <SoftwareSerial.h>
+#include "constants.h"
 
 /* bluetooth */
 #define RX 2
@@ -21,8 +22,9 @@ void loop() {
   if (currentTime - lastTime >= SEND_INTERVAL) {
     lastTime = currentTime;
     int trigger_value = analogRead(TRIGGER_PIN);
-    int output = map(trigger_value, 0, 1024); // FIXME change map value
-
-    bluetoothSerial.println(output);
+    int output = map(trigger_value, 0, 1024, MOTOR_INIT, MOTOR_MAX); // FIXME change map value
+    
+    bluetoothSerial.write(output>>8);
+    bluetoothSerial.write(output%256);
   }
 }
